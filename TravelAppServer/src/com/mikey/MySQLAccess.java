@@ -42,7 +42,7 @@ public class MySQLAccess {
 	public void createLoginTable() throws SQLException {
 		
 		//TODO if this returns 0 rows don't do the following show tables like 'comments';
-		ResultSet showTablesResult = statement.executeQuery("show tables like 'comments'");
+		ResultSet showTablesResult = statement.executeQuery("show tables like 'users'");
 
 		// Messy but seems to be the only way to get number of rows in a ResultSet without processing each.
 		showTablesResult.last();
@@ -53,18 +53,29 @@ public class MySQLAccess {
 		{
 			System.out.println("Creating database..");
 			statement = connect.createStatement();
-			String loginTableCreateCommand = "CREATE TABLE COMMENTS (id INT NOT NULL AUTO_INCREMENT,"
-					+ "MYUSER VARCHAR(30) NOT NULL,"
+			String loginTableCreateCommand = "CREATE TABLE USERS (USER_ID INT NOT NULL AUTO_INCREMENT,"
+					+ "NAME VARCHAR(30) NOT NULL,"
 					+ "EMAIL VARCHAR(30),"
-					+ "WEBPAGE VARCHAR(100) NOT NULL,"
-					+ "DATUM DATE NOT NULL,"
-					+ "SUMMARY VARCHAR(40) NOT NULL,"
-					+ "COMMENTS VARCHAR(400) NOT NULL," + "PRIMARY KEY (ID))";
-			String insertDefaulLoginCommand = "INSERT INTO COMMENTS values (default, 'lars', 'myemail@gmail.com'," +
-					"'http://www.vogella.com', '2009-09-14 10:33:11', 'Summary','My first comment')";
+					+ "OPENAPIKEY VARCHAR(100) NOT NULL,"
+					+ "PRIMARY KEY (USER_ID))";
+			
+			String routesTableCreateCommand = "CREATE TABLE ROUTES (ROUTE_ID INT NOT NULL AUTO_INCREMENT,"
+					+ "ROUTE_NAME_START VARCHAR(30),"
+					+ "ROUTE_NAME_START VARCHAR(30),"
+					+ "START_LAT VARCHAR(15) NOT NULL,"
+					+ "START_LONG VARCHAR(15) NOT NULL,"
+					+ "END_LAT VARCHAR(15) NOT NULL,"
+					+ "END_LONG VARCHAR(15) NOT NULL,"
+					+ "FOREIGN KEY (ID) REFERENCES USERS(USER_ID)," + "PRIMARY KEY (ROUTE_ID))";
+			
+			
+			String insertDefaulLoginCommand = "INSERT INTO USERS values (default, 'test', 'test@gmail.com'," +
+					"'12341234')";
 			
 			statement.executeUpdate(loginTableCreateCommand);
+			statement.executeUpdate(routesTableCreateCommand);
 			statement.executeUpdate(insertDefaulLoginCommand);
+			printTableContents();
 		}
 		else
 		{
@@ -75,7 +86,7 @@ public class MySQLAccess {
 
 	public void printTableContents() throws SQLException {
 		// Result set get the result of the SQL query
-		resultSet = statement.executeQuery("select * from LOGINS.COMMENTS");
+		resultSet = statement.executeQuery("select * from LOGINS.USERS");
 		writeResultSet(resultSet);
 	}
 

@@ -18,7 +18,7 @@ public class TravelAppServer {
 		System.out.println("Initializing server...");
 
 		Thread svr = new Thread(new Server(1337), "server");
-		// svr.start();
+		svr.start();
 
 		String x = "<?xml version=\"1.0\"?> \n" + "<Location> \n"
 				+ "	<Marker id=\"1234\"> \n"
