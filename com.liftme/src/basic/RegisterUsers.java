@@ -2,6 +2,7 @@ package basic;
 
 import java.io.IOException;
 import java.net.URI;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +22,7 @@ import javax.ws.rs.core.UriInfo;
 
 import dataaccessobjects.RegisterUserDao;
 import model.RegisterUser;
+import mysql.MySQLAccess;
 
 // Will map the resource to the URL users
 @Path("/registerusers")
@@ -40,6 +42,15 @@ public class RegisterUsers {
 	  public List<RegisterUser> getUsersBrowser() {
 	    List<RegisterUser> users = new ArrayList<RegisterUser>();
 	    users.addAll(RegisterUserDao.instance.getModel().values());
+	    
+	    MySQLAccess msa = new MySQLAccess();
+	    try {
+			msa.createTables();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    
 	    return users; 
 	  }
 	  
@@ -49,6 +60,17 @@ public class RegisterUsers {
 	  public List<RegisterUser> getUsers() {
 	    List<RegisterUser> users = new ArrayList<RegisterUser>();
 	    users.addAll(RegisterUserDao.instance.getModel().values());
+	    
+	    MySQLAccess msa = new MySQLAccess();
+	    try {
+			msa.createTables();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    
+	    
+	    
 	    return users; 
 	  }
 	  

@@ -2,6 +2,7 @@ package basic.routes;
 
 import java.io.IOException;
 import java.net.URI;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +22,7 @@ import javax.ws.rs.core.UriInfo;
 
 import dataaccessobjects.RoutesDao;
 import model.Route;
+import mysql.MySQLAccess;
 
 // Will map the resource to the URL users
 @Path("/manipulateroutes")
@@ -40,6 +42,15 @@ public class ManipulateRoutes {
 	  public List<Route> getRoutesBrowser() {
 	    List<Route> routes = new ArrayList<Route>();
 	    routes.addAll(RoutesDao.instance.getModel().values());
+
+	    MySQLAccess msa = new MySQLAccess();
+	    try {
+			msa.createTables();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    
 	    return routes; 
 	  }
 	  
@@ -48,6 +59,14 @@ public class ManipulateRoutes {
 	  @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
 	  public List<Route> getUsers() {
 	    List<Route> routes = new ArrayList<Route>();
+	    MySQLAccess msa = new MySQLAccess();
+	    try {
+			msa.createTables();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    
 	    routes.addAll(RoutesDao.instance.getModel().values());
 	    return routes; 
 	  }
