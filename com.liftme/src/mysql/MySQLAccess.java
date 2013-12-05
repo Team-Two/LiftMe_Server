@@ -259,8 +259,8 @@ public class MySQLAccess {
 				  //input data
 				  preparedStatement = connect
 					.prepareStatement("INSERT INTO ROUTES(PK_ROUTE, ACTIVE, " 
-									 +"START_LAT, START_LONG, END_LAT, END_LONG, ROUTE_NAME, START_DATETIME,FK_USER) "
-									 +"VALUES (default, ?, ?, ?, ?, ?, ?, ?, ?)");
+									 +"START_LAT, START_LONG, END_LAT, END_LONG, ROUTE_NAME, START_DATETIME,FK_USER,DEPARTURE) "
+									 +"VALUES (default, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 				  
 				  preparedStatement.setBoolean(1, active);
 				  preparedStatement.setDouble(2, START_LAT);
@@ -270,6 +270,7 @@ public class MySQLAccess {
 				  preparedStatement.setString(6, ROUTE_NAME);
 				  preparedStatement.setTimestamp(7, START_DATETIME);
 				  preparedStatement.setInt(8, PKUser);
+				  preparedStatement.setBoolean(9, false);
 				  
 				  preparedStatement.executeUpdate();
 				  

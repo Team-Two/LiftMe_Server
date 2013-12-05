@@ -22,6 +22,31 @@ public class Route {
 		
 	}
 	
+	public Route(String userID, String startLat, String startLong, String endLat, String endLong, Timestamp timeOfStart, String nameOfRoute){
+		
+		this.userID = userID;
+		this.startLat = startLat;
+		this.startLong = startLong;
+		this.endLat = endLat;
+		this.endLong = endLong;
+		this.setNameOfRoute(nameOfRoute);
+		
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss"); // plus " a" for AM/PM
+		//String timeOfStart = "Friday, Jun 7, 2013 12:10:56 PM";
+		
+		/*try {
+			 
+			Date date = formatter.parse(timeOfStart);
+			//System.out.println(date);
+			//System.out.println(formatter.format(date));
+			long time = date.getTime();
+			this.timeOfStart = new Timestamp(time);
+	 
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}*/
+	}
+	
 	public Route(String userID, String startLat, String startLong, String endLat, String endLong, String timeOfStart, String nameOfRoute){
 		
 		this.userID = userID;
@@ -31,7 +56,7 @@ public class Route {
 		this.endLong = endLong;
 		this.setNameOfRoute(nameOfRoute);
 		
-		SimpleDateFormat formatter = new SimpleDateFormat("EEEE, MMM dd, yyyy HH:mm:ss"); // plus " a" for AM/PM
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss.s"); // plus " a" for AM/PM
 		//String timeOfStart = "Friday, Jun 7, 2013 12:10:56 PM";
 		
 		try {

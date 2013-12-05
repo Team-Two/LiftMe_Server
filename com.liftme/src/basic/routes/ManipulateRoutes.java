@@ -3,6 +3,9 @@ package basic.routes;
 import java.io.IOException;
 import java.net.URI;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,7 +44,6 @@ public class ManipulateRoutes {
 	  @Produces(MediaType.TEXT_XML)
 	  public List<Route> getRoutesBrowser() {
 	    List<Route> routes = new ArrayList<Route>();
-	    routes.addAll(RoutesDao.instance.getModel().values());
 
 	    MySQLAccess msa = new MySQLAccess();
 	    try {
@@ -51,13 +53,26 @@ public class ManipulateRoutes {
 			e.printStackTrace();
 		}
 	    
-	    return routes; 
+	    ArrayList<String[]> dbroutes = msa.RoutesSelectUserPK(1, true);
+	    
+	    
+	    for(int i = 0; i<dbroutes.size();i++)
+	    {
+	    	String[] routeInfo = dbroutes.get(i);
+	    	Route r = new Route(routeInfo[1],routeInfo[2],routeInfo[3],routeInfo[4],routeInfo[5],routeInfo[8],routeInfo[6]);
+	    	routes.add(r);
+	    }
+	    
+	    // no longer depending on hash table
+	    //routes.addAll(RoutesDao.instance.getModel().values());
+	    
+	    return routes;
 	  }
 	  
 	  // Return the list of users for applications
 	  @GET
 	  @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-	  public List<Route> getUsers() {
+	  public List<Route> getRoutes() {
 	    List<Route> routes = new ArrayList<Route>();
 	    MySQLAccess msa = new MySQLAccess();
 	    try {
@@ -67,7 +82,19 @@ public class ManipulateRoutes {
 			e.printStackTrace();
 		}
 	    
-	    routes.addAll(RoutesDao.instance.getModel().values());
+	    ArrayList<String[]> dbroutes = msa.RoutesSelectUserPK(1, true);
+	    
+	    
+	    for(int i = 0; i<dbroutes.size();i++)
+	    {
+	    	String[] routeInfo = dbroutes.get(i);
+	    	Route r = new Route(routeInfo[1],routeInfo[2],routeInfo[3],routeInfo[4],routeInfo[5],routeInfo[8],routeInfo[6]);
+	    	routes.add(r);
+	    }
+	    
+	    // no longer depending on hash table
+	    //routes.addAll(RoutesDao.instance.getModel().values());
+	    
 	    return routes; 
 	  }
 	  
@@ -95,14 +122,28 @@ public class ManipulateRoutes {
 	      @FormParam("nameOfRoute") String nameOfRoute,
 	      @Context HttpServletResponse servletResponse) throws IOException {
 		  
-		  System.out.println("asdf we have a connection!");
-		Route r = new Route(userID,startLat,startLong,endLat,endLong,timeOfStart,nameOfRoute);
+		  Timestamp timeStampedTime = null;
+		  SimpleDateFormat sdf = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss");
+		  try {
+			timeStampedTime = new Timestamp(sdf.parse(timeOfStart).getTime());
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		  
+		System.out.println("We have a connection!");
+		
+		double dStartLat = Double.valueOf(startLat);
+		double dStartLong = Double.valueOf(startLong);
+		double dEndLat = Double.valueOf(endLat);
+		double dEndLong = Double.valueOf(endLong);
 
-		RoutesDao.instance.getModel().put(nameOfRoute, r);
-	    
+		MySQLAccess msa = new MySQLAccess();
+		msa.RoutesInput(1, true, dStartLat, dStartLong, dEndLat, dEndLong, nameOfRoute, timeStampedTime);
+		
 	    servletResponse.sendRedirect("../addaroute.html");
-	  }
-	  
+	    
+	  }	  
 	  
 	  // Defines that the next path parameter after users is
 	  // treated as a parameter and passed to the UserResources
